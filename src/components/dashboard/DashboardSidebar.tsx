@@ -8,7 +8,9 @@ import {
   ChefHat,
   LogOut,
   Menu,
-  X
+  X,
+  ShieldCheck,
+  Tag
 } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -18,8 +20,10 @@ import { cn } from "@/lib/utils";
 const navItems = [
   { title: "Orders", url: "/dashboard", icon: ShoppingBag },
   { title: "Stocks", url: "/dashboard/stocks", icon: Package },
+  { title: "Products", url: "/dashboard/products", icon: Tag },
   { title: "Revenue", url: "/dashboard/revenue", icon: BarChart3 },
-  { title: "Delivery Boys", url: "/dashboard/delivery", icon: Truck },
+  { title: "Delivery Boys", url: "/dashboard/delivery-boys", icon: Truck },
+  { title: "Delivery System", url: "/dashboard/delivery-system", icon: ShieldCheck },
   { title: "Shops", url: "/dashboard/shops", icon: Store },
 ];
 
@@ -49,7 +53,7 @@ const DashboardSidebar = () => {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 p-3 space-y-1">
+      <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
         {navItems.map((item) => (
           <NavLink
             key={item.url}

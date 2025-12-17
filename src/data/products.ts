@@ -4,6 +4,13 @@ export interface ProductVariant {
   price: number;
 }
 
+export interface ShopSponsor {
+  shopId: string;
+  shopName: string;
+  discountPercent: number;
+  area: string;
+}
+
 export interface Product {
   id: string;
   name: string;
@@ -14,6 +21,7 @@ export interface Product {
   isVeg: boolean;
   category: string;
   variants?: ProductVariant[];
+  sponsor?: ShopSponsor;
 }
 
 export const products: Product[] = [
@@ -30,7 +38,13 @@ export const products: Product[] = [
       { id: "1-small", name: "Regular", price: 60 },
       { id: "1-medium", name: "Medium", price: 80 },
       { id: "1-large", name: "Large (Double Patty)", price: 120 }
-    ]
+    ],
+    sponsor: {
+      shopId: "SHP004",
+      shopName: "Gupta Corner",
+      discountPercent: 10,
+      area: "South Village"
+    }
   },
   {
     id: "2",
@@ -44,7 +58,13 @@ export const products: Product[] = [
     variants: [
       { id: "2-half", name: "Half Plate", price: 60 },
       { id: "2-full", name: "Full Plate", price: 100 }
-    ]
+    ],
+    sponsor: {
+      shopId: "SHP002",
+      shopName: "Sharma Kitchen",
+      discountPercent: 15,
+      area: "East Village"
+    }
   },
   {
     id: "3",
@@ -59,7 +79,13 @@ export const products: Product[] = [
       { id: "3-6pcs", name: "6 Pieces", price: 30 },
       { id: "3-12pcs", name: "12 Pieces", price: 50 },
       { id: "3-plate", name: "Full Plate (20 pcs)", price: 80 }
-    ]
+    ],
+    sponsor: {
+      shopId: "SHP003",
+      shopName: "Village Snacks",
+      discountPercent: 20,
+      area: "West Village"
+    }
   },
   {
     id: "4",
@@ -87,7 +113,13 @@ export const products: Product[] = [
     variants: [
       { id: "5-half", name: "Half (5 pcs)", price: 60 },
       { id: "5-full", name: "Full (10 pcs)", price: 110 }
-    ]
+    ],
+    sponsor: {
+      shopId: "SHP002",
+      shopName: "Sharma Kitchen",
+      discountPercent: 12,
+      area: "East Village"
+    }
   },
   {
     id: "6",
@@ -116,7 +148,13 @@ export const products: Product[] = [
       { id: "7-half", name: "Half Plate", price: 100 },
       { id: "7-full", name: "Full Plate", price: 180 },
       { id: "7-family", name: "Family Pack", price: 350 }
-    ]
+    ],
+    sponsor: {
+      shopId: "SHP001",
+      shopName: "Krishna Foods",
+      discountPercent: 15,
+      area: "North Village"
+    }
   },
   {
     id: "8",
@@ -130,7 +168,13 @@ export const products: Product[] = [
     variants: [
       { id: "8-half", name: "Half Plate", price: 70 },
       { id: "8-full", name: "Full Plate", price: 120 }
-    ]
+    ],
+    sponsor: {
+      shopId: "SHP001",
+      shopName: "Krishna Foods",
+      discountPercent: 10,
+      area: "North Village"
+    }
   },
   {
     id: "9",
@@ -144,7 +188,13 @@ export const products: Product[] = [
     variants: [
       { id: "9-single", name: "Single Egg", price: 40 },
       { id: "9-double", name: "Double Egg", price: 60 }
-    ]
+    ],
+    sponsor: {
+      shopId: "SHP005",
+      shopName: "Desi Delights",
+      discountPercent: 18,
+      area: "Central Area"
+    }
   },
   {
     id: "10",
@@ -158,7 +208,13 @@ export const products: Product[] = [
     variants: [
       { id: "10-regular", name: "Regular", price: 70 },
       { id: "10-large", name: "Large", price: 100 }
-    ]
+    ],
+    sponsor: {
+      shopId: "SHP005",
+      shopName: "Desi Delights",
+      discountPercent: 15,
+      area: "Central Area"
+    }
   },
   {
     id: "11",
@@ -201,7 +257,13 @@ export const products: Product[] = [
       { id: "13-half", name: "Half Plate", price: 80 },
       { id: "13-full", name: "Full Plate", price: 140 },
       { id: "13-family", name: "Family Pack", price: 280 }
-    ]
+    ],
+    sponsor: {
+      shopId: "SHP001",
+      shopName: "Krishna Foods",
+      discountPercent: 12,
+      area: "North Village"
+    }
   },
   {
     id: "14",
@@ -236,3 +298,5 @@ export const products: Product[] = [
 ];
 
 export const categories = ["All", "Fast Food", "Chinese", "Indian", "Snacks", "Rolls"];
+
+export const areas = ["North Village", "East Village", "West Village", "South Village", "Central Area", "Market Area"];
