@@ -1,26 +1,19 @@
 import { Button } from "@/components/ui/button";
-import { useCart } from "@/components/cart/CartContext";
 import { Plus, Star } from "lucide-react";
-import { toast } from "sonner";
+import { Product } from "@/data/products";
 
 interface ProductCardProps {
-  id: string;
-  name: string;
-  price: number;
-  image: string;
-  description: string;
-  rating: number;
-  isVeg: boolean;
-  category: string;
+  product: Product;
+  onCustomize: (product: Product) => void;
 }
 
-const ProductCard = ({ id, name, price, image, description, rating, isVeg }: ProductCardProps) => {
-  const { addToCart } = useCart();
-
-  const handleAddToCart = () => {
-    addToCart({ id, name, price, image });
-    toast.success(`${name} added to cart!`);
-  };
+const ProductCard = ({ product, onCustomize }: ProductCardProps) => {
+  const { name, price, image, description, rating, isVeg, variants } = product;
+  
+  // Show starting price if variants exist
+  const displayPrice = variants && variants.length > 0 
+    ? Math.min(...variants.map(v => v.price))
+    : price;
 
   return (
     <div className="bg-card rounded-2xl border border-border overflow-hidden hover:shadow-lg transition-all duration-300 group">
@@ -31,7 +24,7 @@ const ProductCard = ({ id, name, price, image, description, rating, isVeg }: Pro
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
         />
         <div className="absolute top-3 left-3">
-          <span className={`w-5 h-5 rounded-sm border-2 flex items-center justify-center ${isVeg ? 'border-success' : 'border-destructive'}`}>
+          <span className={`w-5 h-5 rounded-sm border-2 flex items-center justify-center ${isVeg ? 'border-success bg-background' : 'border-destructive bg-background'}`}>
             <span className={`w-2 h-2 rounded-full ${isVeg ? 'bg-success' : 'bg-destructive'}`} />
           </span>
         </div>
@@ -46,11 +39,16 @@ const ProductCard = ({ id, name, price, image, description, rating, isVeg }: Pro
         <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{description}</p>
         
         <div className="flex items-center justify-between mt-4">
-          <span className="text-xl font-bold text-foreground">₹{price}</span>
+          <div>
+            <span className="text-xl font-bold text-foreground">₹{displayPrice}</span>
+            {variants && variants.length > 1 && (
+              <span className="text-xs text-muted-foreground ml-1">onwards</span>
+            )}
+          </div>
           <Button 
             variant="default" 
             size="sm"
-            onClick={handleAddToCart}
+            onClick={() => onCustomize(product)}
             className="gap-1"
           >
             <Plus className="w-4 h-4" />

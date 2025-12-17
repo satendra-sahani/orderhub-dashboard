@@ -3,19 +3,27 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import ProductCard from "@/components/products/ProductCard";
+import ProductCustomizationDialog from "@/components/products/ProductCustomizationDialog";
 import CartSheet from "@/components/cart/CartSheet";
-import { products, categories } from "@/data/products";
+import { products, categories, Product } from "@/data/products";
 import { ChefHat, Search, MapPin, Clock } from "lucide-react";
 
 const Index = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const filteredProducts = products.filter((product) => {
     const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = activeCategory === "All" || product.category === activeCategory;
     return matchesSearch && matchesCategory;
   });
+
+  const handleCustomize = (product: Product) => {
+    setSelectedProduct(product);
+    setIsDialogOpen(true);
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -110,7 +118,11 @@ const Index = () => {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               {filteredProducts.map((product) => (
-                <ProductCard key={product.id} {...product} />
+                <ProductCard 
+                  key={product.id} 
+                  product={product}
+                  onCustomize={handleCustomize}
+                />
               ))}
             </div>
           )}
@@ -123,6 +135,13 @@ const Index = () => {
           <p>© 2024 Orderhai. Fresh food for your village.</p>
         </div>
       </footer>
+
+      {/* Product Customization Dialog */}
+      <ProductCustomizationDialog
+        product={selectedProduct}
+        open={isDialogOpen}
+        onOpenChange={setIsDialogOpen}
+      />
     </div>
   );
 };
