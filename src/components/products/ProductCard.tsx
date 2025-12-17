@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { Plus, Star } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Plus, Star, Store, Percent } from "lucide-react";
 import { Product } from "@/data/products";
 
 interface ProductCardProps {
@@ -8,16 +9,35 @@ interface ProductCardProps {
 }
 
 const ProductCard = ({ product, onCustomize }: ProductCardProps) => {
-  const { name, price, image, description, rating, isVeg, variants } = product;
+  const { name, price, image, description, rating, isVeg, variants, sponsor } = product;
   
-  // Show starting price if variants exist
-  const displayPrice = variants && variants.length > 0 
+  // Calculate base price (minimum variant price or regular price)
+  const basePrice = variants && variants.length > 0 
     ? Math.min(...variants.map(v => v.price))
     : price;
+  
+  // Calculate discounted price if sponsored
+  const discountedPrice = sponsor 
+    ? Math.round(basePrice * (1 - sponsor.discountPercent / 100))
+    : basePrice;
 
   return (
-    <div className="bg-card rounded-2xl border border-border overflow-hidden hover:shadow-lg transition-all duration-300 group">
-      <div className="relative h-40 overflow-hidden">
+    <div className="bg-card rounded-2xl border border-border overflow-hidden hover:shadow-lg transition-all duration-300 group relative">
+      {/* Sponsor Badge */}
+      {sponsor && (
+        <div className="absolute top-0 left-0 right-0 z-10 bg-gradient-to-r from-primary to-primary/80 text-primary-foreground px-3 py-1.5 flex items-center justify-between">
+          <div className="flex items-center gap-1.5">
+            <Store className="w-3.5 h-3.5" />
+            <span className="text-xs font-medium">{sponsor.shopName}</span>
+          </div>
+          <div className="flex items-center gap-1 bg-primary-foreground/20 rounded-full px-2 py-0.5">
+            <Percent className="w-3 h-3" />
+            <span className="text-xs font-bold">{sponsor.discountPercent}% OFF</span>
+          </div>
+        </div>
+      )}
+
+      <div className={`relative h-40 overflow-hidden ${sponsor ? 'mt-8' : ''}`}>
         <img
           src={image}
           alt={name}
@@ -38,9 +58,23 @@ const ProductCard = ({ product, onCustomize }: ProductCardProps) => {
         <h3 className="font-semibold text-foreground text-lg">{name}</h3>
         <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{description}</p>
         
+        {/* Area badge for sponsored products */}
+        {sponsor && (
+          <Badge variant="secondary" className="mt-2 text-xs">
+            📍 {sponsor.area}
+          </Badge>
+        )}
+        
         <div className="flex items-center justify-between mt-4">
           <div>
-            <span className="text-xl font-bold text-foreground">₹{displayPrice}</span>
+            {sponsor ? (
+              <div className="flex items-center gap-2">
+                <span className="text-xl font-bold text-primary">₹{discountedPrice}</span>
+                <span className="text-sm text-muted-foreground line-through">₹{basePrice}</span>
+              </div>
+            ) : (
+              <span className="text-xl font-bold text-foreground">₹{basePrice}</span>
+            )}
             {variants && variants.length > 1 && (
               <span className="text-xs text-muted-foreground ml-1">onwards</span>
             )}

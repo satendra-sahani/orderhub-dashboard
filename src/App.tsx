@@ -9,8 +9,10 @@ import Login from "./pages/Login";
 import DashboardLayout from "./components/dashboard/DashboardLayout";
 import Orders from "./pages/dashboard/Orders";
 import Stocks from "./pages/dashboard/Stocks";
+import Products from "./pages/dashboard/Products";
 import Revenue from "./pages/dashboard/Revenue";
 import DeliveryBoys from "./pages/dashboard/DeliveryBoys";
+import DeliverySystem from "./pages/dashboard/DeliverySystem";
 import Shops from "./pages/dashboard/Shops";
 import NotFound from "./pages/NotFound";
 
@@ -29,8 +31,10 @@ const App = () => (
             <Route path="/dashboard" element={<DashboardLayout />}>
               <Route index element={<Orders />} />
               <Route path="stocks" element={<Stocks />} />
+              <Route path="products" element={<Products />} />
               <Route path="revenue" element={<Revenue />} />
-              <Route path="delivery" element={<DeliveryBoys />} />
+              <Route path="delivery-boys" element={<DeliveryBoys />} />
+              <Route path="delivery-system" element={<DeliverySystem />} />
               <Route path="shops" element={<Shops />} />
             </Route>
             <Route path="*" element={<NotFound />} />
