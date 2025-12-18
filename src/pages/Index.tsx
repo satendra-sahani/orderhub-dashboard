@@ -5,6 +5,8 @@ import { Input } from "@/components/ui/input";
 import ProductCard from "@/components/products/ProductCard";
 import ProductCustomizationDialog from "@/components/products/ProductCustomizationDialog";
 import CartSheet from "@/components/cart/CartSheet";
+import UserLoginSheet from "@/components/auth/UserLoginSheet";
+import MyOrdersSheet from "@/components/auth/MyOrdersSheet";
 import { products, categories, Product } from "@/data/products";
 import { ChefHat, Search, MapPin, Clock } from "lucide-react";
 
@@ -13,6 +15,7 @@ const Index = () => {
   const [activeCategory, setActiveCategory] = useState("All");
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isOrdersOpen, setIsOrdersOpen] = useState(false);
 
   const filteredProducts = products.filter((product) => {
     const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
@@ -37,11 +40,12 @@ const Index = () => {
             <span className="text-xl font-bold text-foreground">Orderhai</span>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <UserLoginSheet onViewOrders={() => setIsOrdersOpen(true)} />
             <CartSheet />
             <Link to="/login">
-              <Button variant="outline" size="sm">
-                Admin Login
+              <Button variant="outline" size="sm" className="hidden sm:flex">
+                Admin
               </Button>
             </Link>
           </div>
@@ -142,6 +146,9 @@ const Index = () => {
         open={isDialogOpen}
         onOpenChange={setIsDialogOpen}
       />
+
+      {/* My Orders Sheet */}
+      <MyOrdersSheet open={isOrdersOpen} onOpenChange={setIsOrdersOpen} />
     </div>
   );
 };
