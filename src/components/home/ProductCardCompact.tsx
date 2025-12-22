@@ -60,9 +60,14 @@ const ProductCardCompact = ({ product, onAdd }: ProductCardCompactProps) => {
           </p>
         )}
         
-        <h3 className="text-sm font-medium text-foreground line-clamp-2 leading-tight mb-2 min-h-[2.5rem]">
+        <h3 className="text-sm font-medium text-foreground line-clamp-2 leading-tight mb-1 min-h-[2.5rem]">
           {name}
         </h3>
+
+        {/* Unit display */}
+        {product.unit && (
+          <p className="text-[10px] text-muted-foreground mb-1">{product.unit}</p>
+        )}
 
         <div className="flex items-center justify-between gap-2">
           <div className="flex-1 min-w-0">
