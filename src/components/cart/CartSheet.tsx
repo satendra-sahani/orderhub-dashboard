@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useCart } from "./CartContext";
-import { ShoppingCart, Plus, Minus, Trash2, ArrowLeft, MapPin, Phone, User } from "lucide-react";
+import { ShoppingCart, Plus, Minus, Trash2, ArrowLeft, MapPin, Phone, User, Zap } from "lucide-react";
 import { toast } from "sonner";
 
 const CartSheet = () => {
@@ -41,7 +41,7 @@ const CartSheet = () => {
       return;
     }
 
-    toast.success("Order placed successfully! We'll deliver soon.");
+    toast.success("Order placed successfully! Delivery in 10-15 mins");
     clearCart();
     setShowCheckout(false);
     setCustomerDetails({ name: "", phone: "", address: "", notes: "" });
@@ -51,19 +51,25 @@ const CartSheet = () => {
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>
-        <Button variant="hero" size="lg" className="relative">
-          <ShoppingCart className="w-5 h-5" />
-          <span className="hidden sm:inline">Cart</span>
-          {totalItems > 0 && (
-            <span className="absolute -top-2 -right-2 w-6 h-6 bg-destructive text-destructive-foreground text-xs rounded-full flex items-center justify-center font-bold">
-              {totalItems}
-            </span>
+        <Button 
+          variant="default" 
+          size="default" 
+          className="relative gap-2 bg-primary hover:bg-primary/90"
+        >
+          <ShoppingCart className="w-4 h-4" />
+          {totalItems > 0 ? (
+            <>
+              <span className="hidden sm:inline font-medium">{totalItems} items</span>
+              <span className="font-bold">₹{totalPrice}</span>
+            </>
+          ) : (
+            <span className="hidden sm:inline">Cart</span>
           )}
         </Button>
       </SheetTrigger>
-      <SheetContent className="w-full sm:max-w-md">
-        <SheetHeader>
-          <SheetTitle className="text-xl font-bold flex items-center gap-2">
+      <SheetContent className="w-full sm:max-w-md flex flex-col">
+        <SheetHeader className="border-b border-border pb-4">
+          <SheetTitle className="text-lg font-bold flex items-center gap-2">
             {showCheckout && (
               <Button
                 variant="ghost"
@@ -74,95 +80,104 @@ const CartSheet = () => {
                 <ArrowLeft className="w-4 h-4" />
               </Button>
             )}
-            {showCheckout ? "Order Details" : "Your Cart"}
+            {showCheckout ? "Checkout" : "Your Cart"}
           </SheetTitle>
         </SheetHeader>
         
-        <div className="mt-6 flex flex-col h-[calc(100vh-180px)]">
+        <div className="flex-1 flex flex-col overflow-hidden mt-4">
           {items.length === 0 ? (
             <div className="flex-1 flex flex-col items-center justify-center text-center">
-              <ShoppingCart className="w-16 h-16 text-muted-foreground/30 mb-4" />
-              <p className="text-muted-foreground">Your cart is empty</p>
-              <p className="text-sm text-muted-foreground/70">Add some delicious items!</p>
+              <div className="w-20 h-20 rounded-full bg-secondary flex items-center justify-center mb-4">
+                <ShoppingCart className="w-10 h-10 text-muted-foreground" />
+              </div>
+              <h3 className="font-medium text-foreground mb-1">Your cart is empty</h3>
+              <p className="text-sm text-muted-foreground">Add items to get started</p>
             </div>
           ) : showCheckout ? (
-            /* Checkout View */
             <>
-              <div className="flex-1 overflow-y-auto space-y-6 pr-2">
+              <div className="flex-1 overflow-y-auto space-y-5 pr-2">
+                {/* Delivery Time Banner */}
+                <div className="bg-primary/10 border border-primary/20 rounded-lg p-3 flex items-center gap-2">
+                  <Zap className="w-5 h-5 text-primary" />
+                  <div>
+                    <p className="text-sm font-medium text-foreground">Delivery in 10-15 mins</p>
+                    <p className="text-xs text-muted-foreground">Free delivery on orders above ₹199</p>
+                  </div>
+                </div>
+
                 {/* Order Summary */}
-                <div className="space-y-3">
-                  <h3 className="font-semibold text-foreground">Order Summary</h3>
-                  <div className="bg-muted/50 rounded-xl p-4 space-y-3">
+                <div className="space-y-2">
+                  <h3 className="font-medium text-foreground text-sm">Order Summary</h3>
+                  <div className="bg-secondary rounded-lg p-3 space-y-2">
                     {items.map((item) => (
                       <div key={item.id} className="flex justify-between text-sm">
                         <div className="flex-1">
-                          <span className="text-foreground font-medium">{item.name}</span>
-                          <span className="text-muted-foreground"> ({item.variantName})</span>
+                          <span className="text-foreground">{item.name}</span>
                           <span className="text-muted-foreground"> × {item.quantity}</span>
                         </div>
                         <span className="font-medium text-foreground">₹{item.price * item.quantity}</span>
                       </div>
                     ))}
-                    <div className="border-t border-border pt-3 flex justify-between">
-                      <span className="font-semibold text-foreground">Total</span>
-                      <span className="font-bold text-primary text-lg">₹{totalPrice}</span>
+                    <div className="border-t border-border pt-2 flex justify-between">
+                      <span className="font-medium text-foreground">Total</span>
+                      <span className="font-bold text-primary">₹{totalPrice}</span>
                     </div>
                   </div>
                 </div>
 
-                {/* Customer Details Form */}
-                <div className="space-y-4">
-                  <h3 className="font-semibold text-foreground">Delivery Details</h3>
+                {/* Delivery Details Form */}
+                <div className="space-y-3">
+                  <h3 className="font-medium text-foreground text-sm">Delivery Details</h3>
                   
-                  <div className="space-y-2">
-                    <Label htmlFor="name" className="flex items-center gap-2">
-                      <User className="w-4 h-4 text-muted-foreground" />
-                      Your Name *
+                  <div className="space-y-1.5">
+                    <Label htmlFor="name" className="text-xs flex items-center gap-1">
+                      <User className="w-3 h-3" /> Name *
                     </Label>
                     <Input
                       id="name"
-                      placeholder="Enter your full name"
+                      placeholder="Your full name"
                       value={customerDetails.name}
                       onChange={(e) => setCustomerDetails({ ...customerDetails, name: e.target.value })}
+                      className="h-9"
                     />
                   </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="phone" className="flex items-center gap-2">
-                      <Phone className="w-4 h-4 text-muted-foreground" />
-                      Phone Number *
+                  <div className="space-y-1.5">
+                    <Label htmlFor="phone" className="text-xs flex items-center gap-1">
+                      <Phone className="w-3 h-3" /> Phone *
                     </Label>
                     <Input
                       id="phone"
                       type="tel"
-                      placeholder="Enter your 10-digit number"
+                      placeholder="10-digit mobile number"
                       value={customerDetails.phone}
                       onChange={(e) => setCustomerDetails({ ...customerDetails, phone: e.target.value.replace(/\D/g, '').slice(0, 10) })}
+                      className="h-9"
                     />
                   </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="address" className="flex items-center gap-2">
-                      <MapPin className="w-4 h-4 text-muted-foreground" />
-                      Delivery Address *
+                  <div className="space-y-1.5">
+                    <Label htmlFor="address" className="text-xs flex items-center gap-1">
+                      <MapPin className="w-3 h-3" /> Address *
                     </Label>
                     <Textarea
                       id="address"
-                      placeholder="Enter complete address with landmark"
+                      placeholder="Complete address with landmark"
                       value={customerDetails.address}
                       onChange={(e) => setCustomerDetails({ ...customerDetails, address: e.target.value })}
-                      rows={3}
+                      rows={2}
+                      className="resize-none"
                     />
                   </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="notes">Special Instructions (Optional)</Label>
-                    <Textarea
+                  <div className="space-y-1.5">
+                    <Label htmlFor="notes" className="text-xs">Instructions (Optional)</Label>
+                    <Input
                       id="notes"
-                      placeholder="Any special requests? e.g., Less spicy, extra chutney..."
+                      placeholder="e.g., Less spicy"
                       value={customerDetails.notes}
                       onChange={(e) => setCustomerDetails({ ...customerDetails, notes: e.target.value })}
-                      rows={2}
+                      className="h-9"
                     />
                   </div>
                 </div>
@@ -170,9 +185,9 @@ const CartSheet = () => {
 
               <div className="border-t border-border pt-4 mt-4">
                 <Button 
-                  variant="hero" 
+                  variant="default" 
                   size="lg" 
-                  className="w-full"
+                  className="w-full bg-primary hover:bg-primary/90"
                   onClick={handlePlaceOrder}
                 >
                   Place Order • ₹{totalPrice}
@@ -180,45 +195,46 @@ const CartSheet = () => {
               </div>
             </>
           ) : (
-            /* Cart View */
             <>
-              <div className="flex-1 overflow-y-auto space-y-4 pr-2">
+              <div className="flex-1 overflow-y-auto space-y-3 pr-2">
                 {items.map((item) => (
-                  <div key={item.id} className="flex gap-3 bg-muted/50 rounded-xl p-3">
+                  <div key={item.id} className="flex gap-3 bg-secondary rounded-lg p-3">
                     <img
                       src={item.image}
                       alt={item.name}
-                      className="w-16 h-16 rounded-lg object-cover"
+                      className="w-14 h-14 rounded-lg object-cover"
                     />
-                    <div className="flex-1">
-                      <h4 className="font-medium text-foreground">{item.name}</h4>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="font-medium text-foreground text-sm truncate">{item.name}</h4>
                       <p className="text-xs text-muted-foreground">{item.variantName}</p>
-                      <p className="text-sm text-primary font-semibold">₹{item.price}</p>
-                      <div className="flex items-center gap-2 mt-2">
+                      <p className="text-sm text-primary font-semibold mt-1">₹{item.price}</p>
+                    </div>
+                    <div className="flex flex-col items-end gap-2">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-6 w-6 text-destructive hover:text-destructive"
+                        onClick={() => removeFromCart(item.id)}
+                      >
+                        <Trash2 className="w-3 h-3" />
+                      </Button>
+                      <div className="flex items-center gap-1 bg-primary rounded-lg">
                         <Button
-                          variant="outline"
+                          variant="ghost"
                           size="icon"
-                          className="h-7 w-7"
+                          className="h-7 w-7 text-primary-foreground hover:bg-primary/80"
                           onClick={() => updateQuantity(item.id, item.quantity - 1)}
                         >
                           <Minus className="w-3 h-3" />
                         </Button>
-                        <span className="w-8 text-center font-medium">{item.quantity}</span>
-                        <Button
-                          variant="outline"
-                          size="icon"
-                          className="h-7 w-7"
-                          onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                        >
-                          <Plus className="w-3 h-3" />
-                        </Button>
+                        <span className="w-6 text-center font-medium text-primary-foreground text-sm">{item.quantity}</span>
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="h-7 w-7 text-destructive hover:text-destructive ml-auto"
-                          onClick={() => removeFromCart(item.id)}
+                          className="h-7 w-7 text-primary-foreground hover:bg-primary/80"
+                          onClick={() => updateQuantity(item.id, item.quantity + 1)}
                         >
-                          <Trash2 className="w-4 h-4" />
+                          <Plus className="w-3 h-3" />
                         </Button>
                       </div>
                     </div>
@@ -226,18 +242,18 @@ const CartSheet = () => {
                 ))}
               </div>
 
-              <div className="border-t border-border pt-4 mt-4 space-y-4">
-                <div className="flex items-center justify-between text-lg">
-                  <span className="font-medium text-foreground">Total</span>
-                  <span className="font-bold text-primary">₹{totalPrice}</span>
+              <div className="border-t border-border pt-4 mt-4 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-muted-foreground">Subtotal</span>
+                  <span className="font-bold text-foreground">₹{totalPrice}</span>
                 </div>
                 <Button 
-                  variant="hero" 
+                  variant="default" 
                   size="lg" 
-                  className="w-full"
+                  className="w-full bg-primary hover:bg-primary/90"
                   onClick={handleCheckout}
                 >
-                  Proceed to Checkout • ₹{totalPrice}
+                  Proceed • ₹{totalPrice}
                 </Button>
               </div>
             </>
