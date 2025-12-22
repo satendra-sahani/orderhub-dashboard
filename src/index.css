@@ -111,12 +111,41 @@
   * {
     @apply border-border;
   }
+  
+  /* Custom scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--muted));
+    border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--primary) / 0.6);
+    border-radius: 4px;
+    transition: background 0.2s;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--primary));
+  }
+  
+  /* Thin scrollbar for horizontal scroll */
+  .scrollbar-thin::-webkit-scrollbar {
+    height: 4px;
+  }
+  
   body {
     @apply bg-background text-foreground;
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-feature-settings: "rlig" 1, "calt" 1;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--primary) / 0.6) hsl(var(--muted));
   }
 }
 
