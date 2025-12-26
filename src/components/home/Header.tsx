@@ -37,7 +37,7 @@ interface HeaderProps {
   onViewOrders: () => void
 }
 
-const API_BASE = "http://localhost:9001"
+const API_BASE = "https://orderhai-be.vercel.app"
 
 interface Address {
   _id: string

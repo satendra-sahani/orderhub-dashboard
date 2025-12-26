@@ -9,7 +9,7 @@ import { API_BASE_URL } from "@/components/config"
 import type { Product } from "./Index"
 import { toast } from "sonner"
 
-const API_BASE = API_BASE_URL || "http://localhost:9001"
+const API_BASE = API_BASE_URL || "https://orderhai-be.vercel.app"
 
 const Favourites = () => {
   const [products, setProducts] = useState<Product[]>([])

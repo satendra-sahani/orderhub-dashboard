@@ -12,7 +12,7 @@ import {
 } from "react"
 import type { Product } from "../products/types"
 
-const API_BASE = "http://localhost:9001"
+const API_BASE = "https://orderhai-be.vercel.app"
 
 type CartItem = {
   id: string

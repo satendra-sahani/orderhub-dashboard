@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label"
 import { ChefHat, ArrowLeft, Eye, EyeOff, Phone } from "lucide-react"
 import { toast } from "sonner"
 
-const API_BASE =  "http://localhost:9001"
+const API_BASE =  "https://orderhai-be.vercel.app"
 
 const Login = () => {
   const navigate = useNavigate()

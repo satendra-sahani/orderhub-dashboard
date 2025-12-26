@@ -12,7 +12,7 @@ import { toast } from "sonner"
 import { Clock, XCircle } from "lucide-react"
 import { useCart } from "@/components/cart/CartContext"
 
-const API_BASE = "http://localhost:9001"
+const API_BASE = "https://orderhai-be.vercel.app"
 
 interface OrderItem {
   name: string

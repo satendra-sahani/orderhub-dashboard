@@ -4,7 +4,7 @@
 import { useEffect, useSyncExternalStore } from "react"
 import { toast } from "sonner"
 
-const API_BASE = "http://localhost:9001"
+const API_BASE = "https://orderhai-be.vercel.app"
 
 type Listener = () => void
 

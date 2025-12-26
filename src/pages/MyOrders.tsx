@@ -8,7 +8,7 @@ import { toast } from "sonner"
 import { useNavigate } from "react-router-dom"
 import { XCircle } from "lucide-react"
 
-const API_BASE = API_BASE_URL || "http://localhost:9001"
+const API_BASE = API_BASE_URL || "https://orderhai-be.vercel.app"
 
 interface OrderItem {
     name: string
