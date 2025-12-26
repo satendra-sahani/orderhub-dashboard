@@ -1,97 +1,124 @@
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Plus, Star, Store, Percent } from "lucide-react";
-import { Product } from "@/data/products";
+// ProductCard.tsx (web)
+"use client"
 
-interface ProductCardProps {
-  product: Product;
-  onCustomize: (product: Product) => void;
+import React from "react"
+// import { Card, CardContent } from "@/components/ui/card" // adjust import or use div
+import { Heart, ShoppingCart, ArrowRight } from "lucide-react"
+// import { products } from "../products"
+import type { Product } from "../products/types"
+import { cn } from "@/lib/utils" // or your own classnames helper
+
+type Props = {
+  product: Product
+  onAddToCart: () => void
+  onOrderNow: () => void
+  isFavourite: boolean
+  onToggleFavourite: () => void
+  onOpenDetail?: () => void
 }
 
-const ProductCard = ({ product, onCustomize }: ProductCardProps) => {
-  const { name, price, image, description, rating, isVeg, variants, sponsor } = product;
-  
-  // Calculate base price (minimum variant price or regular price)
-  const basePrice = variants && variants.length > 0 
-    ? Math.min(...variants.map(v => v.price))
-    : price;
-  
-  // Calculate discounted price if sponsored
-  const discountedPrice = sponsor 
-    ? Math.round(basePrice * (1 - sponsor.discountPercent / 100))
-    : basePrice;
+export const ProductCard: React.FC<Props> = ({
+  product,
+  onAddToCart,
+  onOrderNow,
+  isFavourite,
+  onToggleFavourite,
+  onOpenDetail,
+}) => {
+  const basePrice =
+    product.variants && product.variants.length > 0
+      ? Math.min(...product.variants.map((v) => v.price))
+      : product.price
+
+  const discountedPrice = product.sponsor
+    ? Math.round(basePrice * (1 - product.sponsor.discountPercent / 100))
+    : basePrice
 
   return (
-    <div className="bg-card rounded-2xl border border-border overflow-hidden hover:shadow-lg transition-all duration-300 group relative">
-      {/* Sponsor Badge */}
-      {sponsor && (
-        <div className="absolute top-0 left-0 right-0 z-10 bg-gradient-to-r from-primary to-primary/80 text-primary-foreground px-3 py-1.5 flex items-center justify-between">
-          <div className="flex items-center gap-1.5">
-            <Store className="w-3.5 h-3.5" />
-            <span className="text-xs font-medium">{sponsor.shopName}</span>
-          </div>
-          <div className="flex items-center gap-1 bg-primary-foreground/20 rounded-full px-2 py-0.5">
-            <Percent className="w-3 h-3" />
-            <span className="text-xs font-bold">{sponsor.discountPercent}% OFF</span>
-          </div>
-        </div>
-      )}
-
-      <div className={`relative h-40 overflow-hidden ${sponsor ? 'mt-8' : ''}`}>
+    <div className="group relative flex flex-col rounded-xl border bg-white shadow-sm">
+      <button
+        type="button"
+        onClick={onOpenDetail}
+        className="relative h-40 w-full overflow-hidden rounded-t-xl"
+      >
         <img
-          src={image}
-          alt={name}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          src={product.image}
+          className="h-full w-full object-cover transition-transform group-hover:scale-105"
+          alt={product.name}
         />
-        <div className="absolute top-3 left-3">
-          <span className={`w-5 h-5 rounded-sm border-2 flex items-center justify-center ${isVeg ? 'border-success bg-background' : 'border-destructive bg-background'}`}>
-            <span className={`w-2 h-2 rounded-full ${isVeg ? 'bg-success' : 'bg-destructive'}`} />
-          </span>
-        </div>
-        <div className="absolute top-3 right-3 bg-card/90 backdrop-blur-sm px-2 py-1 rounded-lg flex items-center gap-1">
-          <Star className="w-3 h-3 text-warning fill-warning" />
-          <span className="text-xs font-semibold text-foreground">{rating}</span>
-        </div>
-      </div>
-      
-      <div className="p-4">
-        <h3 className="font-semibold text-foreground text-lg">{name}</h3>
-        <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{description}</p>
-        
-        {/* Area badge for sponsored products */}
-        {sponsor && (
-          <Badge variant="secondary" className="mt-2 text-xs">
-            📍 {sponsor.area}
-          </Badge>
+        {product.sponsor && (
+          <div className="absolute right-2 top-2 rounded-full bg-primary px-2 py-1 text-xs font-bold text-white">
+            {product.sponsor.discountPercent}% OFF
+          </div>
         )}
-        
-        <div className="flex items-center justify-between mt-4">
+      </button>
+
+      <button
+        type="button"
+        onClick={onToggleFavourite}
+        className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 shadow-sm"
+      >
+        <Heart
+          size={18}
+          className={cn(
+            "transition-colors",
+            isFavourite ? "fill-red-500 text-red-500" : "text-gray-500",
+          )}
+        />
+      </button>
+
+      <div className="flex flex-1 flex-col gap-1 px-3 pb-3 pt-2">
+        <button
+          type="button"
+          onClick={onOpenDetail}
+          className="text-left text-sm font-semibold text-gray-900 line-clamp-1"
+        >
+          {product.name}
+        </button>
+
+        {product.unit && (
+          <p className="text-[11px] text-gray-500">{product.unit}</p>
+        )}
+
+        <div className="mt-1 flex items-center justify-between gap-2">
           <div>
-            {sponsor ? (
-              <div className="flex items-center gap-2">
-                <span className="text-xl font-bold text-primary">₹{discountedPrice}</span>
-                <span className="text-sm text-muted-foreground line-through">₹{basePrice}</span>
+            {product.sponsor ? (
+              <div className="flex items-baseline gap-1">
+                <span className="text-sm font-bold text-gray-900">
+                  ₹{discountedPrice}
+                </span>
+                <span className="text-xs text-gray-400 line-through">
+                  ₹{basePrice}
+                </span>
               </div>
             ) : (
-              <span className="text-xl font-bold text-foreground">₹{basePrice}</span>
+              <span className="text-sm font-bold text-gray-900">
+                ₹{basePrice}
+              </span>
             )}
-            {variants && variants.length > 1 && (
-              <span className="text-xs text-muted-foreground ml-1">onwards</span>
-            )}
+            <p className="mt-0.5 flex items-center gap-1 text-[11px] text-gray-500">
+              ⭐ {product.rating}
+            </p>
           </div>
-          <Button 
-            variant="default" 
-            size="sm"
-            onClick={() => onCustomize(product)}
-            className="gap-1"
+
+          <button
+            type="button"
+            onClick={onAddToCart}
+            className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-white shadow"
           >
-            <Plus className="w-4 h-4" />
-            Add
-          </Button>
+            <ShoppingCart size={16} />
+          </button>
         </div>
+
+        <button
+          type="button"
+          onClick={onOrderNow}
+          className="mt-2 flex items-center justify-center gap-2 rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-white"
+        >
+          Order Now
+          <ArrowRight size={14} />
+        </button>
       </div>
     </div>
-  );
-};
-
-export default ProductCard;
+  )
+}

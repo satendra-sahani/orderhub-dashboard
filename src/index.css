@@ -253,3 +253,11 @@
     50% { transform: scale(1.05); }
   }
 }
+
+
+.no-scrollbar {
+  scrollbar-width: none;          /* Firefox */
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;                  /* Chrome, Safari */
+}

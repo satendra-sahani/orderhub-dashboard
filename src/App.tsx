@@ -16,6 +16,9 @@ import DeliveryBoys from "./pages/dashboard/DeliveryBoys";
 import DeliverySystem from "./pages/dashboard/DeliverySystem";
 import Shops from "./pages/dashboard/Shops";
 import NotFound from "./pages/NotFound";
+import ProductDetail from "./pages/ProductDetail";
+import MyOrdersPage from "./pages/MyOrders";
+import Favourites from "./pages/Favourites";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +33,10 @@ const App = () => (
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/product/:id" element={<ProductDetail />} />
+              <Route path="/my-orders" element={<MyOrdersPage />} />
+              <Route path="/favourites" element={<Favourites />}/>
+
               <Route path="/dashboard" element={<DashboardLayout />}>
                 <Route index element={<Orders />} />
                 <Route path="stocks" element={<Stocks />} />

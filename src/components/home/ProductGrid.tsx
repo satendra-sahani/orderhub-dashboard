@@ -1,33 +1,38 @@
-import { Product } from "@/data/products";
-import ProductCardCompact from "./ProductCardCompact";
+// src/components/home/ProductGrid.tsx
+"use client"
+
+import type { Product } from "@/pages/Index"
+import ProductCardCompact from "./ProductCardCompact"
+import { useCart } from "@/components/cart/CartContext"
 
 interface ProductGridProps {
-  products: Product[];
-  onAddProduct: (product: Product) => void;
+  products: Product[]
+  onAddProduct: (product: Product) => void
 }
 
 const ProductGrid = ({ products, onAddProduct }: ProductGridProps) => {
+  const { addItem } = useCart()
+
   if (products.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-16 text-center">
-        <span className="text-6xl mb-4">🍽️</span>
-        <h3 className="text-lg font-semibold text-foreground mb-2">No items found</h3>
-        <p className="text-muted-foreground">Try a different search or category</p>
+      <div className="py-6 text-center text-sm text-muted-foreground">
+        No products found.
       </div>
-    );
+    )
   }
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
-      {products.map((product) => (
-        <ProductCardCompact 
-          key={product.id} 
-          product={product} 
-          onAdd={() => onAddProduct(product)}
+    <div className="mt-3 grid grid-cols-1 gap-2 px-2 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4">
+      {products.map(product => (
+        <ProductCardCompact
+          key={product.id}
+          product={product}
+          onCustomize={onAddProduct}
+          onQuickAdd={() => addItem(product)}
         />
       ))}
     </div>
-  );
-};
+  )
+}
 
-export default ProductGrid;
+export default ProductGrid
