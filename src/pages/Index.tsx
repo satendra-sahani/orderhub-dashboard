@@ -13,6 +13,7 @@ import CategoryBar from "@/components/home/CategoryBar"
 import ProductGrid from "@/components/home/ProductGrid"
 import MyOrdersSheet from "@/components/auth/MyOrdersSheet"
 import { API_BASE_URL } from "@/components/config"
+import Footer from "@/components/home/Footer"
 
 const API_BASE = API_BASE_URL || ""
 
@@ -196,6 +197,7 @@ const Index = () => {
           onOpenChange={setIsOrdersOpen}
         />
       </main>
+      <Footer />
     </>
   )
 }
