@@ -761,39 +761,27 @@ const CartSheet = () => {
           </div>
 
           {/* Fixed footer buttons */}
-                    {/* Footer inside sheet width, not full screen */}
           {items.length > 0 && (
-            <div className="mt-2 border-t bg-background pt-2 pb-4">
-              <div className="mx-auto w-full max-w-md px-4">
-                {showCheckout ? (
-                  <Button
-                    className="flex w-full items-center justify-center gap-2"
-                    size="lg"
-                    onClick={handlePlaceOrder}
-                    disabled={isPlacing}
-                  >
-                    {isPlacing && (
-                      <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                    )}
-                    <span>
-                      {isPlacing
-                        ? "Placing order..."
-                        : `Place Order • ₹${total.toFixed(2)}`}
-                    </span>
-                  </Button>
-                ) : (
-                  <Button
-                    className="w-full"
-                    size="lg"
-                    onClick={handleCheckout}
-                  >
-                    Proceed • ₹{total.toFixed(2)}
-                  </Button>
-                )}
-              </div>
+            <div className="fixed bottom-0 left-0 right-0 border-t bg-background pt-2 px-4 pb-4" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
+              {showCheckout ? (
+                <Button
+                  className="w-full"
+                  size="lg"
+                  onClick={handlePlaceOrder}
+                >
+                  Place Order • ₹{total.toFixed(2)}
+                </Button>
+              ) : (
+                <Button
+                  className="w-full"
+                  size="lg"
+                  onClick={handleCheckout}
+                >
+                  Proceed • ₹{total.toFixed(2)}
+                </Button>
+              )}
             </div>
           )}
-
 
         </div>
       </SheetContent>
