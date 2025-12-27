@@ -74,11 +74,9 @@ const CartSheet = () => {
   const [couponError, setCouponError] = useState<string | null>(null);
   const [paymentMethod, setPaymentMethod] = useState<"COD" | "ONLINE">("COD");
 
-  // user + addresses from same API as Header
   const [me, setMe] = useState<MeResponse | null>(null);
   const [isUserLoading, setIsUserLoading] = useState(false);
 
-  // address selection in checkout
   const [selectedAddressId, setSelectedAddressId] = useState<string | "other">(
     ""
   );
@@ -90,7 +88,6 @@ const CartSheet = () => {
     notes: "",
   });
 
-  // NEW: location to send in order payload
   const [location, setLocation] = useState<{
     lat?: number;
     lng?: number;
@@ -99,7 +96,6 @@ const CartSheet = () => {
   const token =
     typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
-  // load /me once when cart opens
   useEffect(() => {
     const loadMe = async () => {
       if (!isOpen || !token) return;
@@ -135,11 +131,10 @@ const CartSheet = () => {
           defaultAddr
             ? defaultAddr._id
             : data.addresses.length
-            ? "other"
-            : "other"
+              ? "other"
+              : "other"
         );
 
-        // initialize location from default address if lat/lng present
         if (defaultAddr?.latitude && defaultAddr?.longitude) {
           setLocation({
             lat: defaultAddr.latitude,
@@ -177,7 +172,6 @@ const CartSheet = () => {
     }
   };
 
-  // try to get GPS location
   const captureGpsLocation = () => {
     if (!("geolocation" in navigator)) {
       toast.error("GPS not available in this browser");
@@ -223,8 +217,6 @@ const CartSheet = () => {
 
     let addressToUse = customerDetails.address.trim();
 
-    // If logged in and user typed a new address (Other),
-    // create/update via /api/users/addresses so Header sees it next time.
     if (token && me) {
       try {
         if (selectedAddressId === "other") {
@@ -235,7 +227,6 @@ const CartSheet = () => {
             isDefault: !me.addresses.length,
           };
 
-          // If we already captured GPS for this "other" address, persist it too
           if (location.lat && location.lng) {
             payload.latitude = location.lat;
             payload.longitude = location.lng;
@@ -265,7 +256,6 @@ const CartSheet = () => {
           );
           if (addr) {
             addressToUse = `${addr.line1}, ${addr.city}`;
-            // Use coordinates from saved address, if any
             if (addr.latitude && addr.longitude) {
               setLocation({
                 lat: addr.latitude,
@@ -280,7 +270,6 @@ const CartSheet = () => {
       }
     }
 
-    // pass location to backend
     const order = await placeOrder({
       paymentMethod,
       address: addressToUse,
@@ -519,7 +508,6 @@ const CartSheet = () => {
                     />
                   </div>
 
-                  {/* Address selection from /me */}
                   {me && me.addresses.length > 0 && (
                     <div className="space-y-2">
                       <Label className="flex items-center gap-1 text-xs">
@@ -548,11 +536,10 @@ const CartSheet = () => {
                                 setLocation({});
                               }
                             }}
-                            className={`w-full rounded-md border px-2 py-1 text-left ${
-                              selectedAddressId === addr._id
+                            className={`w-full rounded-md border px-2 py-1 text-left ${selectedAddressId === addr._id
                                 ? "border-primary bg-primary/5"
                                 : "border-muted-foreground/20"
-                            }`}
+                              }`}
                           >
                             <div className="flex items-center justify-between">
                               <span className="font-medium">
@@ -573,14 +560,12 @@ const CartSheet = () => {
                           type="button"
                           onClick={() => {
                             setSelectedAddressId("other");
-                            // keep current address text; user may type new
                             setLocation({});
                           }}
-                          className={`w-full rounded-md border px-2 py-1 text-left ${
-                            selectedAddressId === "other"
+                          className={`w-full rounded-md border px-2 py-1 text-left ${selectedAddressId === "other"
                               ? "border-primary bg-primary/5"
                               : "border-muted-foreground/20"
-                          }`}
+                            }`}
                         >
                           <span className="text-xs font-medium">
                             Other address
@@ -777,7 +762,7 @@ const CartSheet = () => {
 
           {/* Fixed footer buttons */}
           {items.length > 0 && (
-            <div className="space-y-2 border-t pt-2">
+            <div className="fixed bottom-0 left-0 right-0 border-t bg-background pt-2 px-4 pb-4" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
               {showCheckout ? (
                 <Button
                   className="w-full"
@@ -797,6 +782,7 @@ const CartSheet = () => {
               )}
             </div>
           )}
+
         </div>
       </SheetContent>
     </Sheet>
