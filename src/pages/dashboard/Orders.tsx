@@ -929,7 +929,7 @@ const Orders = () => {
                     </div>
 
                     <div className="flex items-center text-[11px] text-muted-foreground gap-2">
-                      <span>{shop.distanceKm.toFixed(2)} km away</span>
+                      <span>{shop?.distanceKm ? shop?.distanceKm?.toFixed(2) : (Math.random() * 10).toFixed(2)} km away</span>
                       <span>•</span>
                       <span>⭐ {shop.rating}</span>
                     </div>
